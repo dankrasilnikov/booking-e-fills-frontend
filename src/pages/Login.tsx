@@ -1,16 +1,15 @@
-
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from "@/contexts/AuthContext";
+import { auth as authApi } from "@/lib/api";
+import { authStore } from "@/stores/authStore";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,11 +19,20 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    const success = await login(email, password);
-    
-    setIsLoading(false);
-    if (success) {
+    try {
+      const data = await authApi.login({email, password});
+      
+      authStore.setAuth(data.access_token, data.user);
+      authStore.setRefreshToken(data.refresh_token);
+      const { username } = await authApi.getName(authStore.user.id);
+      authStore.username = username;
+      
       navigate(from);
+    } catch (error) {
+      console.error('Login error:', error);
+      // Handle error (show error message to user)
+    } finally {
+      setIsLoading(false);
     }
   };
 

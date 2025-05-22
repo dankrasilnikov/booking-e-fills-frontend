@@ -4,14 +4,13 @@ import { StationList } from "@/components/map/StationList";
 import { TimeSelection } from "@/components/map/TimeSelection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
+import { gasStations } from "@/lib/api";
+import { authStore } from "@/stores/authStore";
 import { IMapObject } from "@/types/api.ts";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { gasStations } from "@/lib/api";
 
 const Map = () => {
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [filteredStations, setFilteredStations] = useState<IMapObject[]>([]);
   const [selectedStation, setSelectedStation] = useState<IMapObject | null>(null);
@@ -79,7 +78,7 @@ const Map = () => {
   };
 
   const handleReservation = () => {
-    if (!user) {
+    if (!authStore.isAuthenticated) {
       toast({
         title: "Login required",
         description: "Please login to reserve a charging station",

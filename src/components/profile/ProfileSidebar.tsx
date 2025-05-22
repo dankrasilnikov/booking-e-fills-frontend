@@ -1,17 +1,13 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/contexts/AuthContext";
+import { authStore } from "@/stores/authStore";
 
 interface ProfileSidebarProps {
-  user: {
-    name: string;
-    email: string;
-  };
   onLogout: () => void;
 }
 
-export const ProfileSidebar = ({ user, onLogout }: ProfileSidebarProps) => {
+export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
   return (
     <div>
       <Card>
@@ -20,11 +16,11 @@ export const ProfileSidebar = ({ user, onLogout }: ProfileSidebarProps) => {
             <Avatar className="h-24 w-24 mb-4">
               <AvatarImage src="" />
               <AvatarFallback className="bg-e-blue text-white text-2xl">
-                Hello User
+                {authStore?.username ? authStore?.username.charAt(0).toUpperCase() : 'U'}
               </AvatarFallback>
             </Avatar>
-            <h2 className="text-xl font-bold">{user?.name ? user?.name : 'Hello'}</h2>
-            <p className="text-gray-500">{user.email}</p>
+            <h2 className="text-xl font-bold">{authStore?.username ? authStore?.username : 'User'}</h2>
+            <p className="text-gray-500">{authStore.user.email}</p>
             <Button 
               variant="outline" 
               className="mt-4 w-full"

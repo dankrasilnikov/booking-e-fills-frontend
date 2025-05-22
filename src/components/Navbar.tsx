@@ -1,26 +1,25 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Menu, X, User } from "lucide-react";
+import { authStore } from "@/stores/authStore";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const auth = authStore;
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
-          <img 
-                  src="/logo.png"
-                  alt="Zephyra Logo" 
-                  className="w-full object-cover w-8 h-8"
-                />
+            <img 
+              src="/logo.png"
+              alt="Zephyra Logo" 
+              className="w-full object-cover w-8 h-8"
+            />
             <span className="text-xl font-bold">Zephyra</span>
           </Link>
 
@@ -29,14 +28,14 @@ const Navbar = () => {
             <Link to="/" className="text-gray-600 hover:text-e-blue transition-colors">Home</Link>
             <Link to="/map" className="text-gray-600 hover:text-e-blue transition-colors">Find Stations</Link>
             
-            {user ? (
+            {auth.isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar>
                       <AvatarImage src="" />
                       <AvatarFallback className="bg-e-blue text-white">
-                        Hello User
+                        {auth?.username?.charAt(0) || 'U'}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -45,7 +44,7 @@ const Navbar = () => {
                   <DropdownMenuItem>
                     <Link to="/profile" className="flex w-full">Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={logout}>
+                  <DropdownMenuItem onClick={() => authStore.logout()}>
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -89,7 +88,7 @@ const Navbar = () => {
               Find Stations
             </Link>
             
-            {user ? (
+            {auth.isAuthenticated ? (
               <>
                 <Link
                   to="/profile"
@@ -100,7 +99,7 @@ const Navbar = () => {
                 </Link>
                 <button
                   onClick={() => {
-                    logout();
+                    auth.logout();
                     setIsMenuOpen(false);
                   }}
                   className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md"

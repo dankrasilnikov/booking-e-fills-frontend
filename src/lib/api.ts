@@ -8,21 +8,17 @@ import {
   AddStationRequest,
   AuthResponse,
   ApiResponse,
-  IMapObject
+  IMapObject,
+  RefreshRequest
 } from '../types/api';
+import { authStore } from '../stores/authStore';
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
-// Helper function to handle API calls
-async function apiCall<T>(
-  endpoint: string, 
-  options: RequestInit = {}
-): Promise<T> {
-  const token = localStorage.getItem('auth_token');
-
+// Separate function for refresh calls to avoid recursion
+async function refreshApiCall<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     ...options.headers,
   };
 
@@ -32,6 +28,36 @@ async function apiCall<T>(
   });
 
   if (!response.ok) {
+    throw new Error(`API call failed: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+async function apiCall<T>(
+  endpoint: string, 
+  options: RequestInit = {}
+): Promise<T> {
+  const accessToken = await authStore.ensureValidToken();
+
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
+    ...options.headers,
+  };
+
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      // Token expired, try to refresh
+      await authStore.refreshToken();
+      // Retry the request with new token
+      return apiCall(endpoint, options);
+    }
     throw new Error(`API call failed: ${response.statusText}`);
   }
 
@@ -51,6 +77,15 @@ export const auth = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+    
+  refresh: (data: RefreshRequest): Promise<AuthResponse> =>
+    refreshApiCall('/auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  getName: (userId: number): Promise<{ username: string }> => 
+    apiCall(`/users/profile?supabaseId=${userId}`),
 };
 
 // Gas Station endpoints
@@ -80,4 +115,13 @@ export const admin = {
     apiCall(`/admin/stations/delete/${id}`, {
       method: 'DELETE',
     }),
-}; 
+};
+
+// Initialize auth store and set up refresh callback
+export function initializeAuth() {
+  authStore.initialize();
+  authStore.setRefreshCallback(async (refreshToken) => {
+    const response = await auth.refresh({ refresh_token: refreshToken });
+    return response;
+  });
+} 

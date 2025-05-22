@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAuth } from "@/contexts/AuthContext";
 import { ProfileSidebar } from "@/components/profile/ProfileSidebar";
 import { BookingHistory } from "@/components/profile/BookingHistory";
 import { ProfileSettings } from "@/components/profile/ProfileSettings";
 import { SecuritySettings } from "@/components/profile/SecuritySettings";
 import { gasStations } from '../lib/api';
 import { useState, useEffect } from 'react';
+import { authStore } from "@/stores/authStore";
+import { StationSlot } from "@/types/api";
 
 // Dummy data for booking history
 const bookingHistory = [
@@ -34,12 +35,11 @@ const bookingHistory = [
 ];
 
 const UserProfile = () => {
-  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [stations, setStations] = useState<StationSlot[]>([]);
 
-  // Redirect if not logged in
-  if (!user) {
+  // Redirect if not authenticated
+  if (!authStore.isAuthenticated || !authStore.userData) {
     navigate("/login", { state: { from: "/profile" } });
     return null;
   }
@@ -56,28 +56,13 @@ const UserProfile = () => {
     // TODO: Implement actual API call
   };
 
-  useEffect(() => {
-    const fetchStations = async () => {
-      try {
-        const availableStations = await gasStations.getAvailable(
-          new Date().toISOString()
-        );
-        setStations(availableStations);
-      } catch (error) {
-        console.error('Failed to fetch stations:', error);
-      }
-    };
-
-    fetchStations();
-  }, []);
-
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-6">My Profile</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left sidebar */}
-        <ProfileSidebar user={user} onLogout={logout} />
+        <ProfileSidebar onLogout={() => authStore.logout()} />
 
         {/* Main content */}
         <div className="lg:col-span-2">
@@ -102,8 +87,8 @@ const UserProfile = () => {
 
             <TabsContent value="profile" className="mt-0">
               <ProfileSettings
-                initialName={user.name}
-                initialEmail={user.email}
+                initialName={authStore.username}
+                initialEmail={authStore.user.email}
                 onUpdate={handleProfileUpdate}
               />
             </TabsContent>
