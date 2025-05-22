@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { authStore } from "@/stores/authStore";
+import { Link } from "react-router-dom";
 
 interface ProfileSidebarProps {
   onLogout: () => void;
@@ -28,6 +29,19 @@ export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
             >
               Sign Out
             </Button>
+            {
+              authStore.userrole?.toLowerCase() === 'admin' && (
+                <Link to="/admin" className="flex w-full mt-4">
+                  <Button 
+                    variant="secondary" 
+                    className="w-full"
+                    onClick={onLogout}
+                  >
+                    Admin Dashboard
+                  </Button>
+                </Link>
+              )
+            }
           </div>
         </CardContent>
       </Card>

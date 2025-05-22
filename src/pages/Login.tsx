@@ -24,9 +24,10 @@ const Login = () => {
       
       authStore.setAuth(data.access_token, data.user);
       authStore.setRefreshToken(data.refresh_token);
-      const { username } = await authApi.getName(authStore.user.id);
+      const { username, role } = await authApi.getProfile(authStore.user.id);
       authStore.username = username;
-      
+      authStore.userrole = role;
+
       navigate(from);
     } catch (error) {
       console.error('Login error:', error);

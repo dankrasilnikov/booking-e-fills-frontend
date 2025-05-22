@@ -84,7 +84,7 @@ export const auth = {
       body: JSON.stringify(data),
     }),
 
-  getName: (userId: number): Promise<{ username: string }> => 
+  getProfile: (userId: number): Promise<{ username: string, role: string }> => 
     apiCall(`/users/profile?supabaseId=${userId}`),
 };
 
@@ -111,8 +111,8 @@ export const admin = {
       body: JSON.stringify(data),
     }),
 
-  deleteStation: (id: number): Promise<ApiResponse<void>> =>
-    apiCall(`/admin/stations/delete/${id}`, {
+  deleteStation: (name: string): Promise<ApiResponse<void>> =>
+    apiCall(`/admin/stations/delete/${name.split(" ").join("_")}`, {
       method: 'DELETE',
     }),
 };

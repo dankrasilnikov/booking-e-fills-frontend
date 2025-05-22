@@ -13,6 +13,7 @@ class AuthStore {
   user: User | null = null;
   isAuthenticated: boolean = false;
   username: string | null = null;
+  userrole: string | null = null;
   private refreshPromise: Promise<void> | null = null;
   private refreshCallback: RefreshCallback | null = null;
   private initialized = false;
@@ -81,9 +82,9 @@ class AuthStore {
         const response = await this.refreshCallback(refreshToken);
         this.setAuth(response.access_token, response.user);
         this.setRefreshToken(response.refresh_token);
-        const { username } = await auth.getName(response.user.id);
-        console.log('refresh ', username);
+        const { username, role } = await auth.getProfile(response.user.id);
         this.username = username;
+        this.userrole = role;
       } catch (error) {
         console.error('Failed to refresh token:', error);
         this.logout();

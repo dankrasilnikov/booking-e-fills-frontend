@@ -1,4 +1,3 @@
-
 export interface GasStation {
   id: number;
   stationName: string;
@@ -44,9 +43,11 @@ export interface BookStationRequest {
 }
 
 export interface AddStationRequest {
-  stationName: string;
+  title: string;
+  connectorCount: number;
+  latitude: number;
+  longitude: number;
 }
-
 
 export interface AuthResponse {
   access_token: string;
