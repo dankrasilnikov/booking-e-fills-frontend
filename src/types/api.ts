@@ -1,0 +1,66 @@
+
+export interface GasStation {
+  id: number;
+  stationName: string;
+}
+
+export interface User {
+  id: number;
+  email: string;
+}
+
+export interface Reservation {
+  id: number;
+  gasStation: GasStation;
+  user: User;
+  startTime: string;
+  endTime: string;
+}
+
+export interface StationSlot {
+  id: number;
+  gasStation: GasStation;
+  slotTime: string;
+  availableSlots: number;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface BookStationRequest {
+  gasStationId: number;
+}
+
+export interface AddStationRequest {
+  stationName: string;
+}
+
+
+export interface AuthResponse {
+  access_token: string;
+  expires_at: number;
+  expires_in: string;
+  refresh_token: string;
+  token_type: string;
+  user: User;
+}
+
+export interface ApiResponse<T> {
+  data: T;
+  message?: string;
+}
+
+export interface IMapObject {
+  id: number;
+  title: string;
+  latitude: number;
+  longitude: number;
+  active: boolean;
+}
