@@ -1,6 +1,6 @@
-import { 
-  GasStation, 
-  Reservation, 
+import {
+  GasStation,
+  Reservation,
   StationSlot,
   RegisterRequest,
   LoginRequest,
@@ -35,10 +35,12 @@ async function refreshApiCall<T>(endpoint: string, options: RequestInit = {}): P
 }
 
 async function apiCall<T>(
-  endpoint: string, 
+  endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
   const accessToken = await authStore.ensureValidToken();
+  let requestCount = 0;
+  const MAX_REQUEST = 2;
 
   const headers = {
     'Content-Type': 'application/json',
@@ -52,8 +54,12 @@ async function apiCall<T>(
   });
 
   if (!response.ok) {
+    if(requestCount >= MAX_REQUEST) {
+      throw new Error(`API call failed: ${response.statusText}`);
+    }
+
     if (response.status === 401) {
-      // Token expired, try to refresh
+      requestCount += 1;
       await authStore.refreshToken();
       // Retry the request with new token
       return apiCall(endpoint, options);
@@ -66,7 +72,7 @@ async function apiCall<T>(
 
 // Auth endpoints
 export const auth = {
-  register: (data: RegisterRequest): Promise<AuthResponse> => 
+  register: (data: RegisterRequest): Promise<AuthResponse> =>
     apiCall('/auth/register', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -77,14 +83,14 @@ export const auth = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
-    
+
   refresh: (data: RefreshRequest): Promise<AuthResponse> =>
     refreshApiCall('/auth/refresh', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
-  getProfile: (userId: number): Promise<{ username: string, role: string }> => 
+  getProfile: (userId: number): Promise<{ username: string, role: string }> =>
     apiCall(`/users/profile?supabaseId=${userId}`),
 };
 
@@ -124,4 +130,4 @@ export function initializeAuth() {
     const response = await auth.refresh({ refresh_token: refreshToken });
     return response;
   });
-} 
+}
