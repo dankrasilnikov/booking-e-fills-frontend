@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Card,
   CardContent,
@@ -9,75 +9,75 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { auth, user } from '@/lib/api'
-import { authStore } from '@/stores/authStore'
-import { toast } from '@/hooks/use-toast.ts'
+} from '@/components/ui/card';
+import { auth, user } from '@/lib/api';
+import { authStore } from '@/stores/authStore';
+import { toast } from '@/hooks/use-toast.ts';
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const from = (location.state as { from?: string })?.from || '/'
+  const from = (location.state as { from?: string })?.from || '/';
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
-      const data = await auth.login({ email, password })
+      const data = await auth.login({ email, password });
 
-      authStore.setAuth(data.access_token, data.user)
-      authStore.setRefreshToken(data.refresh_token)
-      const { username, role } = await user.getProfile(authStore.user.id)
-      authStore.username = username
-      authStore.userrole = role
+      authStore.setAuth(data.access_token, data.user);
+      authStore.setRefreshToken(data.refresh_token);
+      const { username, role } = await user.getProfile(authStore.user.id);
+      authStore.username = username;
+      authStore.userrole = role;
 
-      navigate(from)
+      navigate(from);
     } catch (error) {
-      console.error('Login error:', error)
+      console.error('Login error:', error);
       // Handle error (show error message to user)
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      )
-  }
+      );
+  };
 
   const handleForgotPassword = async (e) => {
     try {
-      e.preventDefault()
+      e.preventDefault();
       if (!email || !validateEmail(email)) {
         toast({
           variant: 'destructive',
           title: 'Please fill the email field',
           description: 'Your email is invalid or missing.',
-        })
+        });
       }
 
-      await auth.resetPassword(email)
+      await auth.resetPassword(email);
 
       toast({
         title: 'Success',
         description: 'Please check your email and follow the instructions.',
-      })
+      });
     } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Error',
         description: error,
-      })
+      });
     }
-  }
+  };
 
   return (
     <div className='container max-w-md mx-auto px-4 py-12'>
@@ -141,7 +141,7 @@ const Login = () => {
         </CardFooter>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

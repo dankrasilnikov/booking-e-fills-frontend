@@ -1,13 +1,13 @@
-import { useNavigate } from 'react-router-dom'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ProfileSidebar } from '@/components/profile/ProfileSidebar'
-import { BookingHistory } from '@/components/profile/BookingHistory'
-import { ProfileSettings } from '@/components/profile/ProfileSettings'
-import { SecuritySettings } from '@/components/profile/SecuritySettings'
-import { gasStations } from '../lib/api'
-import { useState, useEffect } from 'react'
-import { authStore } from '@/stores/authStore'
-import { StationSlot } from '@/types/api'
+import { useNavigate } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ProfileSidebar } from '@/components/profile/ProfileSidebar';
+import { BookingHistory } from '@/components/profile/BookingHistory';
+import { ProfileSettings } from '@/components/profile/ProfileSettings';
+import { SecuritySettings } from '@/components/profile/SecuritySettings';
+import { gasStations } from '../lib/api';
+import { useState, useEffect } from 'react';
+import { authStore } from '@/stores/authStore';
+import { StationSlot } from '@/types/api';
 
 // Dummy data for booking history
 const bookingHistory = [
@@ -32,32 +32,32 @@ const bookingHistory = [
     time: '16:45',
     status: 'Cancelled',
   },
-]
+];
 
 const UserProfile = () => {
-  const navigate = useNavigate()
-  const [stations, setStations] = useState<StationSlot[]>([])
+  const navigate = useNavigate();
+  const [stations, setStations] = useState<StationSlot[]>([]);
 
   // Redirect if not authenticated
   if (!authStore.isAuthenticated || !authStore.userData) {
-    navigate('/login', { state: { from: '/profile' } })
-    return null
+    navigate('/login', { state: { from: '/profile' } });
+    return null;
   }
 
   const handleProfileUpdate = async (name: string, email: string) => {
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     // TODO: Implement actual API call
-  }
+  };
 
   const handlePasswordUpdate = async (
     currentPassword: string,
     newPassword: string
   ) => {
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     // TODO: Implement actual API call
-  }
+  };
 
   return (
     <div className='container mx-auto px-4 py-12'>
@@ -103,7 +103,7 @@ const UserProfile = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserProfile
+export default UserProfile;

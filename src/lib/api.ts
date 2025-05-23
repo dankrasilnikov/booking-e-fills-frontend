@@ -10,10 +10,10 @@ import {
   ApiResponse,
   IMapObject,
   RefreshRequest,
-} from '../types/api'
-import { authStore } from '../stores/authStore'
+} from '../types/api';
+import { authStore } from '../stores/authStore';
 
-const API_BASE_URL = 'http://localhost:8080/api'
+const API_BASE_URL = 'http://localhost:8080/api';
 
 // Separate function for refresh calls to avoid recursion
 async function refreshApiCall<T>(
@@ -23,54 +23,54 @@ async function refreshApiCall<T>(
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
-  }
+  };
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers,
-  })
+  });
 
   if (!response.ok) {
-    throw new Error(`API call failed: ${response.statusText}`)
+    throw new Error(`API call failed: ${response.statusText}`);
   }
 
-  return response.json()
+  return response.json();
 }
 
 async function apiCall<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const accessToken = await authStore.ensureValidToken()
-  let requestCount = 0
-  const MAX_REQUEST = 2
+  const accessToken = await authStore.ensureValidToken();
+  let requestCount = 0;
+  const MAX_REQUEST = 2;
 
   const headers = {
     'Content-Type': 'application/json',
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     ...options.headers,
-  }
+  };
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers,
-  })
+  });
 
   if (!response.ok) {
     if (requestCount >= MAX_REQUEST) {
-      throw new Error(`API call failed: ${response.statusText}`)
+      throw new Error(`API call failed: ${response.statusText}`);
     }
 
     if (response.status === 401) {
-      requestCount += 1
-      await authStore.refreshToken()
+      requestCount += 1;
+      await authStore.refreshToken();
       // Retry the request with new token
-      return apiCall(endpoint, options)
+      return apiCall(endpoint, options);
     }
-    throw new Error(`API call failed: ${response.statusText}`)
+    throw new Error(`API call failed: ${response.statusText}`);
   }
 
-  return response.json()
+  return response.json();
 }
 
 // Auth endpoints
@@ -100,7 +100,7 @@ export const auth = {
         email,
       }),
     }),
-}
+};
 
 export const user = {
   getProfile: (userId: number): Promise<{ username: string; role: string }> =>
@@ -113,9 +113,9 @@ export const user = {
         newPassword: password,
       }),
     }),
-}
+};
 
-export const reservations = {}
+export const reservations = {};
 
 export const gasStations = {
   getAvailable: (timestamp: number): Promise<IMapObject[]> =>
@@ -129,7 +129,7 @@ export const gasStations = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
-}
+};
 
 // Admin endpoints
 export const admin = {
@@ -145,13 +145,13 @@ export const admin = {
     apiCall(`/admin/stations/delete/${name.split(' ').join('_')}`, {
       method: 'DELETE',
     }),
-}
+};
 
 // Initialize auth store and set up refresh callback
 export function initializeAuth() {
-  authStore.initialize()
+  authStore.initialize();
   authStore.setRefreshCallback(async (refreshToken) => {
-    const response = await auth.refresh({ refresh_token: refreshToken })
-    return response
-  })
+    const response = await auth.refresh({ refresh_token: refreshToken });
+    return response;
+  });
 }

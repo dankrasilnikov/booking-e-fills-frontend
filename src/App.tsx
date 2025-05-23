@@ -1,24 +1,24 @@
-import { Toaster } from '@/components/ui/toaster'
-import { Toaster as Sonner } from '@/components/ui/sonner'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Layout from './components/Layout'
-import Index from './pages/Index'
-import Map from './pages/Map'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import BookingConfirmation from './pages/BookingConfirmation'
-import UserProfile from './pages/UserProfile'
-import NotFound from './pages/NotFound'
-import Admin from './pages/Admin'
-import { initializeAuth } from '@/lib/api.ts'
-import { Analytics } from '@vercel/analytics/react'
-import ForgotPassword from './pages/ForgotPassword'
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Index from './pages/Index';
+import Map from './pages/Map';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import BookingConfirmation from './pages/BookingConfirmation';
+import UserProfile from './pages/UserProfile';
+import NotFound from './pages/NotFound';
+import Admin from './pages/Admin';
+import { initializeAuth } from '@/lib/api.ts';
+import { Analytics } from '@vercel/analytics/react';
+import ForgotPassword from './pages/ForgotPassword';
 
-initializeAuth()
+initializeAuth();
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -84,19 +84,19 @@ const App = () => (
               </Layout>
             }
           />
-            <Route
-                path='/forgotpass'
-                element={
-                    <Layout>
-                        <ForgotPassword />
-                    </Layout>
-                }
-            />
+          <Route
+            path='/forgotpass'
+            element={
+              <Layout>
+                <ForgotPassword />
+              </Layout>
+            }
+          />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-)
+);
 
-export default App
+export default App;

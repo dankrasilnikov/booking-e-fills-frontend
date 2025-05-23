@@ -4,16 +4,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { IMapObject } from '@/types/api.ts'
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { IMapObject } from '@/types/api.ts';
 
 interface ReservationDialogProps {
-  station: IMapObject | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onReserve: () => void
-  bookingTime: { time: string; duration: number } | null
+  station: IMapObject | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onReserve: () => void;
+  bookingTime: { time: string; duration: number } | null;
 }
 
 export const ReservationDialog = ({
@@ -23,10 +23,10 @@ export const ReservationDialog = ({
   onReserve,
   bookingTime,
 }: ReservationDialogProps) => {
-  if (!station || !bookingTime) return null
+  if (!station || !bookingTime) return null;
 
-  const formattedTime = new Date(bookingTime.time).toLocaleString()
-  const formattedDuration = `${bookingTime.duration} minutes`
+  const formattedTime = new Date(bookingTime.time).toLocaleString();
+  const formattedDuration = `${bookingTime.duration} minutes`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -56,5 +56,5 @@ export const ReservationDialog = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

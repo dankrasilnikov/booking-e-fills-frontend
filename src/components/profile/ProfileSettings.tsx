@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { toast } from '@/components/ui/use-toast'
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
 
 interface ProfileSettingsProps {
-  initialName: string
-  initialEmail: string
-  onUpdate: (name: string, email: string) => Promise<void>
+  initialName: string;
+  initialEmail: string;
+  onUpdate: (name: string, email: string) => Promise<void>;
 }
 
 export const ProfileSettings = ({
@@ -15,30 +15,30 @@ export const ProfileSettings = ({
   initialEmail,
   onUpdate,
 }: ProfileSettingsProps) => {
-  const [name, setName] = useState(initialName)
-  const [email, setEmail] = useState(initialEmail)
-  const [isLoading, setIsLoading] = useState(false)
+  const [name, setName] = useState(initialName);
+  const [email, setEmail] = useState(initialEmail);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
-      await onUpdate(name, email)
+      await onUpdate(name, email);
       toast({
         title: 'Profile Updated',
         description: 'Your profile information has been updated successfully.',
-      })
+      });
     } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Update Failed',
         description: 'Failed to update profile information. Please try again.',
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Card>
@@ -80,5 +80,5 @@ export const ProfileSettings = ({
         </form>
       </CardContent>
     </Card>
-  )
-}
+  );
+};

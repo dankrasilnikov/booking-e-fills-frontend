@@ -1,11 +1,11 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { authStore } from '@/stores/authStore'
-import { Link } from 'react-router-dom'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { authStore } from '@/stores/authStore';
+import { Link } from 'react-router-dom';
 
 interface ProfileSidebarProps {
-  onLogout: () => void
+  onLogout: () => void;
 }
 
 export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
@@ -70,5 +70,5 @@ export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};

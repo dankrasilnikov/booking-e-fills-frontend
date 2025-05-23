@@ -4,27 +4,27 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { MapPin } from 'lucide-react'
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { MapPin } from 'lucide-react';
 
 interface Station {
-  id: string
-  name: string
-  address: string
-  lat: number
-  lng: number
-  available: number
-  total: number
-  type: string
-  pricePerKwh: string
-  connectors: string[]
-  rating: number
+  id: string;
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+  available: number;
+  total: number;
+  type: string;
+  pricePerKwh: string;
+  connectors: string[];
+  rating: number;
 }
 
 interface StationListProps {
-  stations: Station[]
-  onStationSelect: (station: Station) => void
+  stations: Station[];
+  onStationSelect: (station: Station) => void;
 }
 
 export const StationList = ({
@@ -78,5 +78,5 @@ export const StationList = ({
         </Card>
       ))}
     </div>
-  )
-}
+  );
+};

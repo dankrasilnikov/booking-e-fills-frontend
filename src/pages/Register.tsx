@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -6,59 +6,59 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
-import { auth } from '@/lib/api'
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { auth } from '@/lib/api';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [agreeToTerms, setAgreeToTerms] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [passwordError, setPasswordError] = useState('')
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const validateForm = () => {
     if (password !== confirmPassword) {
-      setPasswordError('Passwords do not match')
-      return false
+      setPasswordError('Passwords do not match');
+      return false;
     }
 
     if (password.length < 8) {
-      setPasswordError('Password must be at least 8 characters')
-      return false
+      setPasswordError('Password must be at least 8 characters');
+      return false;
     }
 
     if (!agreeToTerms) {
-      setPasswordError('You must agree to the terms and conditions')
-      return false
+      setPasswordError('You must agree to the terms and conditions');
+      return false;
     }
 
-    setPasswordError('')
-    return true
-  }
+    setPasswordError('');
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!validateForm()) {
-      return
+      return;
     }
 
-    setIsLoading(true)
-    const success = await auth.register({ username, email, password })
-    setIsLoading(false)
+    setIsLoading(true);
+    const success = await auth.register({ username, email, password });
+    setIsLoading(false);
 
     if (success) {
-      navigate('/')
+      navigate('/');
     }
-  }
+  };
 
   return (
     <div className='container max-w-md mx-auto px-4 py-12'>
@@ -160,7 +160,7 @@ const Register = () => {
         </CardFooter>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

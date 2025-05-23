@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Calendar, Map, MapPin, Check, User, QrCode } from 'lucide-react'
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Calendar, Map, MapPin, Check, User, QrCode } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -253,7 +253,7 @@ const Index = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

@@ -1,14 +1,14 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import { IMapObject } from '@/types/api.ts'
-import { useEffect } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { IMapObject } from '@/types/api.ts';
+import { useEffect } from 'react';
 
 interface MapContainerProps {
-  stations: IMapObject[]
-  userLocation: { lat: number; lng: number } | null
-  onStationSelect: (stationId: number) => void
-  isLoading: boolean
+  stations: IMapObject[];
+  userLocation: { lat: number; lng: number } | null;
+  onStationSelect: (stationId: number) => void;
+  isLoading: boolean;
 }
 
 // Custom icons
@@ -21,7 +21,7 @@ const activeIcon = new L.Icon({
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
-})
+});
 
 const inactiveIcon = new L.Icon({
   iconUrl:
@@ -32,7 +32,7 @@ const inactiveIcon = new L.Icon({
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
-})
+});
 
 const userIcon = new L.Icon({
   iconUrl:
@@ -43,14 +43,14 @@ const userIcon = new L.Icon({
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
-})
+});
 
 // Component to handle map resizing
 const MapResizer = () => {
-  const map = useMap()
-  map.invalidateSize()
-  return null
-}
+  const map = useMap();
+  map.invalidateSize();
+  return null;
+};
 
 // Component to handle map markers
 const MapMarkers = ({
@@ -68,15 +68,15 @@ const MapMarkers = ({
           icon={station.active ? activeIcon : inactiveIcon}
           eventHandlers={{
             click: (event) => {
-              event.target.closePopup()
-              onStationSelect(station.id)
+              event.target.closePopup();
+              onStationSelect(station.id);
             },
             mouseover: (event) => {
-              console.log(event.target)
-              event.target.openPopup()
+              console.log(event.target);
+              event.target.openPopup();
             },
             mouseout: (event) => {
-              event.target.closePopup()
+              event.target.closePopup();
             },
           }}
         >
@@ -98,8 +98,8 @@ const MapMarkers = ({
         </Marker>
       )}
     </>
-  )
-}
+  );
+};
 
 export const MapComponent = ({
   stations,
@@ -108,25 +108,25 @@ export const MapComponent = ({
   isLoading,
 }: MapContainerProps) => {
   // Calculate center point
-  let center: [number, number]
+  let center: [number, number];
   if (userLocation) {
-    center = [userLocation.lat, userLocation.lng]
+    center = [userLocation.lat, userLocation.lng];
   } else if (stations.length > 0) {
     const avgLat =
-      stations.reduce((sum, s) => sum + s.latitude, 0) / stations.length
+      stations.reduce((sum, s) => sum + s.latitude, 0) / stations.length;
     const avgLng =
-      stations.reduce((sum, s) => sum + s.longitude, 0) / stations.length
-    center = [avgLat, avgLng]
+      stations.reduce((sum, s) => sum + s.longitude, 0) / stations.length;
+    center = [avgLat, avgLng];
   } else {
-    center = [52.3791, 4.9003] // Default to Amsterdam
+    center = [52.3791, 4.9003]; // Default to Amsterdam
   }
 
   useEffect(() => {
-    const elem = document.querySelector('div.leaflet-bottom.leaflet-right')
+    const elem = document.querySelector('div.leaflet-bottom.leaflet-right');
     if (elem) {
-      ;(elem as HTMLElement).style.display = 'none'
+      (elem as HTMLElement).style.display = 'none';
     }
-  }, [])
+  }, []);
 
   return (
     <div className='w-full h-[400px] relative rounded-lg overflow-hidden'>
@@ -149,5 +149,5 @@ export const MapComponent = ({
         />
       </MapContainer>
     </div>
-  )
-}
+  );
+};

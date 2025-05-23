@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
+import { useState, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,26 +8,26 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { toast } from '@/components/ui/use-toast'
-import { QrCode, Calendar, MapPin, Check } from 'lucide-react'
+} from '@/components/ui/card';
+import { toast } from '@/components/ui/use-toast';
+import { QrCode, Calendar, MapPin, Check } from 'lucide-react';
 
 const BookingConfirmation = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [qrUploaded, setQrUploaded] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const location = useLocation();
+  const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [qrUploaded, setQrUploaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Get booking details from location state
   const { station, date, time } = location.state || {
     station: null,
     date: '',
     time: '',
-  }
+  };
 
   // Generate a random booking ID
-  const bookingId = `EF-${Math.floor(100000 + Math.random() * 900000)}`
+  const bookingId = `EF-${Math.floor(100000 + Math.random() * 900000)}`;
 
   if (!station) {
     return (
@@ -40,25 +40,25 @@ const BookingConfirmation = () => {
         </p>
         <Button onClick={() => navigate('/map')}>Find Charging Stations</Button>
       </div>
-    )
+    );
   }
 
   const handleQrUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setIsLoading(true)
+      setIsLoading(true);
 
       // Simulate processing delay
       setTimeout(() => {
-        setQrUploaded(true)
-        setIsLoading(false)
+        setQrUploaded(true);
+        setIsLoading(false);
         toast({
           title: 'QR Code Uploaded',
           description:
             'Your QR code has been successfully uploaded and verified.',
-        })
-      }, 1500)
+        });
+      }, 1500);
     }
-  }
+  };
 
   const handleComplete = () => {
     toast({
@@ -66,9 +66,9 @@ const BookingConfirmation = () => {
       description:
         'Your charging station is ready for use. Thank you for using Zephyra!',
       variant: 'default',
-    })
-    navigate('/')
-  }
+    });
+    navigate('/');
+  };
 
   return (
     <div className='container mx-auto max-w-lg px-4 py-12'>
@@ -173,7 +173,7 @@ const BookingConfirmation = () => {
         </CardFooter>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default BookingConfirmation
+export default BookingConfirmation;

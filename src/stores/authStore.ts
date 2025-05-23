@@ -1,112 +1,112 @@
-import { makeAutoObservable } from 'mobx'
-import { User } from '../types/api'
-import { auth, user } from '@/lib/api'
+import { makeAutoObservable } from 'mobx';
+import { User } from '../types/api';
+import { auth, user } from '@/lib/api';
 
 type RefreshCallback = (refreshToken: string) => Promise<{
-  access_token: string
-  refresh_token: string
-  user: User
-}>
+  access_token: string;
+  refresh_token: string;
+  user: User;
+}>;
 
 class AuthStore {
-  accessToken: string | null = null
-  user: User | null = null
-  isAuthenticated: boolean = false
-  username: string | null = null
-  userrole: string | null = null
-  private refreshPromise: Promise<void> | null = null
-  private refreshCallback: RefreshCallback | null = null
-  private initialized = false
+  accessToken: string | null = null;
+  user: User | null = null;
+  isAuthenticated: boolean = false;
+  username: string | null = null;
+  userrole: string | null = null;
+  private refreshPromise: Promise<void> | null = null;
+  private refreshCallback: RefreshCallback | null = null;
+  private initialized = false;
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this);
   }
 
   initialize() {
-    if (this.initialized) return
+    if (this.initialized) return;
 
     // Initialize from localStorage if available
-    const refreshToken = localStorage.getItem('refresh_token')
+    const refreshToken = localStorage.getItem('refresh_token');
     if (refreshToken) {
-      this.isAuthenticated = true
+      this.isAuthenticated = true;
     }
 
-    this.initialized = true
+    this.initialized = true;
   }
 
   setRefreshCallback(callback: RefreshCallback) {
-    this.refreshCallback = callback
+    this.refreshCallback = callback;
     // If we have a refresh token and are authenticated, try to refresh now
-    const refreshToken = localStorage.getItem('refresh_token')
+    const refreshToken = localStorage.getItem('refresh_token');
     if (refreshToken && this.isAuthenticated) {
-      this.refreshToken()
+      this.refreshToken();
     }
   }
 
   setAuth(accessToken: string, user: User) {
-    this.accessToken = accessToken
-    this.user = user
-    this.isAuthenticated = true
+    this.accessToken = accessToken;
+    this.user = user;
+    this.isAuthenticated = true;
   }
 
   setAccessToken(accessToken: string) {
-    this.accessToken = accessToken
+    this.accessToken = accessToken;
   }
 
   setRefreshToken(refreshToken: string) {
-    localStorage.setItem('refresh_token', refreshToken)
+    localStorage.setItem('refresh_token', refreshToken);
   }
 
   logout() {
-    this.accessToken = null
-    this.user = null
-    this.isAuthenticated = false
-    localStorage.removeItem('refresh_token')
+    this.accessToken = null;
+    this.user = null;
+    this.isAuthenticated = false;
+    localStorage.removeItem('refresh_token');
   }
 
   get userData() {
-    return this.user
+    return this.user;
   }
 
   async refreshToken() {
     // If there's already a refresh in progress, return that promise
     if (this.refreshPromise) {
-      return this.refreshPromise
+      return this.refreshPromise;
     }
 
-    const refreshToken = localStorage.getItem('refresh_token')
+    const refreshToken = localStorage.getItem('refresh_token');
     if (!refreshToken || !this.refreshCallback) {
-      this.logout()
-      return
+      this.logout();
+      return;
     }
 
     // Create a new refresh promise
     this.refreshPromise = (async () => {
       try {
-        const response = await this.refreshCallback(refreshToken)
-        this.setAuth(response.access_token, response.user)
-        this.setRefreshToken(response.refresh_token)
-        const { username, role } = await user.getProfile(response.user.id)
-        this.username = username
-        this.userrole = role
+        const response = await this.refreshCallback(refreshToken);
+        this.setAuth(response.access_token, response.user);
+        this.setRefreshToken(response.refresh_token);
+        const { username, role } = await user.getProfile(response.user.id);
+        this.username = username;
+        this.userrole = role;
       } catch (error) {
-        console.error('Failed to refresh token:', error)
-        this.logout()
+        console.error('Failed to refresh token:', error);
+        this.logout();
       } finally {
-        this.refreshPromise = null
+        this.refreshPromise = null;
       }
-    })()
+    })();
 
-    return this.refreshPromise
+    return this.refreshPromise;
   }
 
   // Method to check if token needs refresh and handle it
   async ensureValidToken() {
     if (!this.accessToken) {
-      await this.refreshToken()
+      await this.refreshToken();
     }
-    return this.accessToken
+    return this.accessToken;
   }
 }
 
-export const authStore = new AuthStore()
+export const authStore = new AuthStore();

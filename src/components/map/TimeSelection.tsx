@@ -1,28 +1,28 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 
 interface TimeSelectionProps {
-  onTimeSelect: (time: string, duration: number) => void
+  onTimeSelect: (time: string, duration: number) => void;
 }
 
 export const TimeSelection = ({ onTimeSelect }: TimeSelectionProps) => {
-  const [selectedTime, setSelectedTime] = useState('')
-  const [selectedDuration, setSelectedDuration] = useState('60') // Default 1 hour
+  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedDuration, setSelectedDuration] = useState('60'); // Default 1 hour
 
   const handleSubmit = () => {
     if (selectedTime) {
-      onTimeSelect(selectedTime, parseInt(selectedDuration))
+      onTimeSelect(selectedTime, parseInt(selectedDuration));
     }
-  }
+  };
 
   return (
     <div className='space-y-4 p-4 bg-white rounded-lg shadow'>
@@ -63,5 +63,5 @@ export const TimeSelection = ({ onTimeSelect }: TimeSelectionProps) => {
         Find Available Stations
       </Button>
     </div>
-  )
-}
+  );
+};

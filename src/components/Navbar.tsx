@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
-import { Menu, X, User } from 'lucide-react'
-import { authStore } from '@/stores/authStore'
+} from '@/components/ui/dropdown-menu';
+import { Menu, X, User } from 'lucide-react';
+import { authStore } from '@/stores/authStore';
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const auth = authStore
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const auth = authStore;
 
   return (
     <nav className='sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm'>
@@ -119,8 +119,8 @@ const Navbar = () => {
                 </Link>
                 <button
                   onClick={() => {
-                    auth.logout()
-                    setIsMenuOpen(false)
+                    auth.logout();
+                    setIsMenuOpen(false);
                   }}
                   className='block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md'
                 >
@@ -149,7 +149,7 @@ const Navbar = () => {
         )}
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

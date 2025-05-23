@@ -4,18 +4,18 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 
 interface Booking {
-  id: string
-  stationName: string
-  date: string
-  time: string
-  status: 'Completed' | 'Cancelled'
+  id: string;
+  stationName: string;
+  date: string;
+  time: string;
+  status: 'Completed' | 'Cancelled';
 }
 
 interface BookingHistoryProps {
-  bookings: Booking[]
+  bookings: Booking[];
 }
 
 export const BookingHistory = ({ bookings }: BookingHistoryProps) => {
@@ -58,5 +58,5 @@ export const BookingHistory = ({ bookings }: BookingHistoryProps) => {
         )}
       </CardContent>
     </Card>
-  )
-}
+  );
+};

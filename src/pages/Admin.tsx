@@ -1,42 +1,42 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { admin, auth } from '@/lib/api'
-import { authStore } from '@/stores/authStore'
-import { toast } from 'sonner'
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { admin, auth } from '@/lib/api';
+import { authStore } from '@/stores/authStore';
+import { toast } from 'sonner';
 
 const Admin = () => {
-  const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(false)
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [stationData, setStationData] = useState({
     title: '',
     connectorCount: 0,
     latitude: 0,
     longitude: 0,
-  })
+  });
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         // Check if user is authenticated and is admin
-        console.log(authStore.userrole)
+        console.log(authStore.userrole);
         if (authStore.userrole?.toLowerCase() !== 'admin') {
-          navigate('/login', { state: { from: '/admin' } })
-          return
+          navigate('/login', { state: { from: '/admin' } });
+          return;
         }
       } catch (error) {
-        console.error('Auth check failed:', error)
-        navigate('/login', { state: { from: '/admin' } })
+        console.error('Auth check failed:', error);
+        navigate('/login', { state: { from: '/admin' } });
       } finally {
-        setIsCheckingAuth(false)
+        setIsCheckingAuth(false);
       }
-    }
+    };
 
-    checkAuth()
-  }, [navigate])
+    checkAuth();
+  }, [navigate]);
 
   // Show loading state while checking auth
   if (isCheckingAuth) {
@@ -44,52 +44,52 @@ const Admin = () => {
       <div className='container mx-auto px-4 py-12'>
         <div className='text-center'>Loading...</div>
       </div>
-    )
+    );
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setStationData((prev) => ({
       ...prev,
       [name]: name === 'title' ? value : Number(value),
-    }))
-  }
+    }));
+  };
 
   const handleAddStation = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
-      await admin.addStation(stationData)
-      toast.success('Station added successfully')
+      await admin.addStation(stationData);
+      toast.success('Station added successfully');
       setStationData({
         title: '',
         connectorCount: 0,
         latitude: 0,
         longitude: 0,
-      })
+      });
     } catch (error) {
-      toast.error('Failed to add station')
-      console.error('Add station error:', error)
+      toast.error('Failed to add station');
+      console.error('Add station error:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleDeleteStation = async (name: string) => {
-    if (!confirm('Are you sure you want to delete this station?')) return
+    if (!confirm('Are you sure you want to delete this station?')) return;
 
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await admin.deleteStation(name)
-      toast.success('Station deleted successfully')
+      await admin.deleteStation(name);
+      toast.success('Station deleted successfully');
     } catch (error) {
-      toast.error('Failed to delete station')
-      console.error('Delete station error:', error)
+      toast.error('Failed to delete station');
+      console.error('Delete station error:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className='container mx-auto px-4 py-12'>
@@ -195,8 +195,8 @@ const Admin = () => {
                 onClick={() => {
                   const name = (
                     document.getElementById('stationId') as HTMLInputElement
-                  ).value
-                  if (name) handleDeleteStation(name)
+                  ).value;
+                  if (name) handleDeleteStation(name);
                 }}
               >
                 {isLoading ? 'Deleting...' : 'Delete Station'}
@@ -206,7 +206,7 @@ const Admin = () => {
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Admin
+export default Admin;
