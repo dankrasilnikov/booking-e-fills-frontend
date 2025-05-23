@@ -13,6 +13,7 @@ import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import {initializeAuth} from "@/lib/api.ts";
+import { Analytics } from '@vercel/analytics/react';
 
 initializeAuth();
 
@@ -21,6 +22,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <Analytics />
       <Toaster />
       <Sonner />
       <BrowserRouter>
