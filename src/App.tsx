@@ -14,6 +14,7 @@ import NotFound from './pages/NotFound'
 import Admin from './pages/Admin'
 import { initializeAuth } from '@/lib/api.ts'
 import { Analytics } from '@vercel/analytics/react'
+import ForgotPassword from './pages/ForgotPassword'
 
 initializeAuth()
 
@@ -83,6 +84,14 @@ const App = () => (
               </Layout>
             }
           />
+            <Route
+                path='/forgotpass'
+                element={
+                    <Layout>
+                        <ForgotPassword />
+                    </Layout>
+                }
+            />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -49,6 +49,10 @@ class AuthStore {
     this.isAuthenticated = true
   }
 
+  setAccessToken(accessToken: string) {
+    this.accessToken = accessToken
+  }
+
   setRefreshToken(refreshToken: string) {
     localStorage.setItem('refresh_token', refreshToken)
   }
