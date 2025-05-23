@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { User } from '../types/api';
-import { auth } from '@/lib/api';
+import { auth, user } from '@/lib/api';
 
 type RefreshCallback = (refreshToken: string) => Promise<{
   access_token: string;
@@ -24,13 +24,13 @@ class AuthStore {
 
   initialize() {
     if (this.initialized) return;
-    
+
     // Initialize from localStorage if available
     const refreshToken = localStorage.getItem('refresh_token');
     if (refreshToken) {
       this.isAuthenticated = true;
     }
-    
+
     this.initialized = true;
   }
 
@@ -82,7 +82,7 @@ class AuthStore {
         const response = await this.refreshCallback(refreshToken);
         this.setAuth(response.access_token, response.user);
         this.setRefreshToken(response.refresh_token);
-        const { username, role } = await auth.getProfile(response.user.id);
+        const { username, role } = await user.getProfile(response.user.id);
         this.username = username;
         this.userrole = role;
       } catch (error) {
@@ -105,4 +105,4 @@ class AuthStore {
   }
 }
 
-export const authStore = new AuthStore(); 
+export const authStore = new AuthStore();

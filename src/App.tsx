@@ -11,11 +11,10 @@ import Register from "./pages/Register";
 import BookingConfirmation from "./pages/BookingConfirmation";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
-import { initializeApp } from "./lib/init";
 import Admin from "./pages/Admin";
+import {initializeAuth} from "@/lib/api.ts";
 
-// Initialize the app
-initializeApp();
+initializeAuth();
 
 const queryClient = new QueryClient();
 

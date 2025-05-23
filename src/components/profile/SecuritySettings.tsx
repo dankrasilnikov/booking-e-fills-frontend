@@ -3,20 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import {user} from "@/lib/api.ts";
 
 interface SecuritySettingsProps {
   onPasswordUpdate: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
 export const SecuritySettings = ({ onPasswordUpdate }: SecuritySettingsProps) => {
-  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (newPassword !== confirmPassword) {
       toast({
         variant: "destructive",
@@ -25,16 +25,15 @@ export const SecuritySettings = ({ onPasswordUpdate }: SecuritySettingsProps) =>
       });
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
-      await onPasswordUpdate(currentPassword, newPassword);
+      await user.changePassword(newPassword);
       toast({
         title: "Password Updated",
         description: "Your password has been changed successfully."
       });
-      setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
@@ -55,19 +54,6 @@ export const SecuritySettings = ({ onPasswordUpdate }: SecuritySettingsProps) =>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="currentPassword" className="text-sm font-medium">
-              Current Password
-            </label>
-            <Input
-              id="currentPassword"
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-            />
-          </div>
-          
           <div className="space-y-2">
             <label htmlFor="newPassword" className="text-sm font-medium">
               New Password
