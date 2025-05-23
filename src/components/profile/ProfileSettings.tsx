@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
+import {user} from "@/lib/api.ts";
+import {authStore} from "@/stores/authStore.ts";
 
 interface ProfileSettingsProps {
   initialName: string;
@@ -24,7 +26,8 @@ export const ProfileSettings = ({
     setIsLoading(true);
 
     try {
-      await onUpdate(name, email);
+      await user.changeUsername(name);
+      authStore.setUsername(name);
       toast({
         title: 'Profile Updated',
         description: 'Your profile information has been updated successfully.',
@@ -68,6 +71,7 @@ export const ProfileSettings = ({
               id='email'
               type='email'
               value={email}
+              disabled={true}
               onChange={(e) => setEmail(e.target.value)}
               placeholder='your.email@example.com'
               required

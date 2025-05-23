@@ -57,6 +57,10 @@ class AuthStore {
     localStorage.setItem('refresh_token', refreshToken);
   }
 
+  setUsername(username: string)  {
+    this.username = username;
+  }
+
   logout() {
     this.accessToken = null;
     this.user = null;

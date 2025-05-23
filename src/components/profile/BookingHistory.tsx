@@ -5,20 +5,34 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Reservation } from './Reservation';
+import { useState } from 'react';
 
 interface Booking {
-  id: string;
-  stationName: string;
-  date: string;
-  time: string;
-  status: 'Completed' | 'Cancelled';
+  duration: string;
+  seqNum: number;
+  start: number;
+  title: string;
+  id: number;
 }
 
 interface BookingHistoryProps {
   bookings: Booking[];
+  onRefresh: () => Promise<void>;
 }
 
-export const BookingHistory = ({ bookings }: BookingHistoryProps) => {
+export const BookingHistory = ({ bookings, onRefresh }: BookingHistoryProps) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleCancel = async () => {
+    setIsRefreshing(true);
+    try {
+      await onRefresh();
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -31,26 +45,11 @@ export const BookingHistory = ({ bookings }: BookingHistoryProps) => {
         {bookings.length > 0 ? (
           <div className='space-y-4'>
             {bookings.map((booking) => (
-              <div key={booking.id} className='border rounded-md p-4'>
-                <div className='flex justify-between items-center mb-2'>
-                  <h3 className='font-semibold'>{booking.stationName}</h3>
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full ${
-                      booking.status === 'Completed'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {booking.status}
-                  </span>
-                </div>
-                <div className='text-sm text-gray-500'>
-                  <div>Booking ID: {booking.id}</div>
-                  <div>
-                    Date: {booking.date} at {booking.time}
-                  </div>
-                </div>
-              </div>
+              <Reservation
+                key={booking.seqNum}
+                {...booking}
+                onCancel={handleCancel}
+              />
             ))}
           </div>
         ) : (

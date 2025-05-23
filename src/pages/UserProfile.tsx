@@ -4,39 +4,33 @@ import { ProfileSidebar } from '@/components/profile/ProfileSidebar';
 import { BookingHistory } from '@/components/profile/BookingHistory';
 import { ProfileSettings } from '@/components/profile/ProfileSettings';
 import { SecuritySettings } from '@/components/profile/SecuritySettings';
-import { gasStations } from '../lib/api';
+import { gasStations, user } from '../lib/api';
 import { useState, useEffect } from 'react';
 import { authStore } from '@/stores/authStore';
 import { StationSlot } from '@/types/api';
-
-// Dummy data for booking history
-const bookingHistory = [
-  {
-    id: 'EF-834729',
-    stationName: 'Amsterdam Central Station',
-    date: '2025-05-10',
-    time: '14:30',
-    status: 'Completed',
-  },
-  {
-    id: 'EF-729183',
-    stationName: 'Utrecht Science Park',
-    date: '2025-05-03',
-    time: '10:15',
-    status: 'Completed',
-  },
-  {
-    id: 'EF-612895',
-    stationName: 'Rotterdam Business Center',
-    date: '2025-04-27',
-    time: '16:45',
-    status: 'Cancelled',
-  },
-];
+import { toast } from 'sonner';
 
 const UserProfile = () => {
   const navigate = useNavigate();
-  const [stations, setStations] = useState<StationSlot[]>([]);
+  const [bookingHistory, setBookingHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBookingHistory = async () => {
+      try {
+        const reservations = await user.getReservations();
+        console.log(reservations);
+        setBookingHistory(reservations);
+      } catch (error) {
+        console.error('Error fetching booking history:', error);
+        toast.error('Failed to load booking history');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBookingHistory();
+  }, []);
 
   // Redirect if not authenticated
   if (!authStore.isAuthenticated || !authStore.userData) {

@@ -69,8 +69,9 @@ async function apiCall<T>(
     }
     throw new Error(`API call failed: ${response.statusText}`);
   }
+  const text = await response.text();
 
-  return response.json();
+  return text ? JSON.parse(text) : null;
 }
 
 // Auth endpoints
@@ -113,9 +114,31 @@ export const user = {
         newPassword: password,
       }),
     }),
-};
 
-export const reservations = {};
+  changeUsername: (username: string): Promise<any> => apiCall('/users/profile/changeusername', {
+    method: 'POST',
+    body: JSON.stringify({
+      newUsername: username
+    })
+  }),
+
+  createReservation: (seqNum: number, start: number, title: string, duration: string): Promise<any> => apiCall('/reservations/book', {
+    method: 'POST',
+    body: JSON.stringify({
+      seqNum,
+      title,
+      start,
+      duration,
+    })
+  }),
+
+  getReservations: (): Promise<any> => apiCall('/reservations/getall'),
+
+  cancelReservation: (id: number): Promise<any> =>
+    apiCall(`/reservations/cancel/${id}`, {
+      method: 'DELETE',
+    }),
+};
 
 export const gasStations = {
   getAvailable: (timestamp: number): Promise<IMapObject[]> =>

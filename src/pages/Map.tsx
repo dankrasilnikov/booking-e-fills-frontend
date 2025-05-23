@@ -4,11 +4,26 @@ import { StationList } from '@/components/map/StationList';
 import { TimeSelection } from '@/components/map/TimeSelection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/components/ui/use-toast';
-import { gasStations } from '@/lib/api';
+import { gasStations, user } from '@/lib/api';
 import { authStore } from '@/stores/authStore';
 import { IMapObject } from '@/types/api.ts';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+const formatDuration = (minutes: number): string => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  
+  let duration = 'PT';
+  if (hours > 0) {
+    duration += `${hours}H`;
+  }
+  if (remainingMinutes > 0) {
+    duration += `${remainingMinutes}M`;
+  }
+  
+  return duration;
+};
 
 const Map = () => {
   const navigate = useNavigate();
@@ -99,6 +114,11 @@ const Map = () => {
 
     if (!bookingTime || !selectedStation) return;
 
+    const isoDuration = formatDuration(bookingTime.duration);
+    const timestamp = Math.floor(new Date(bookingTime.time).getTime() / 1000);
+    console.log(1, timestamp, selectedStation.title, isoDuration);
+    user.createReservation(1, timestamp, selectedStation.title, isoDuration);
+    
     // Mock successful reservation
     toast({
       title: 'Reservation Confirmed!',
