@@ -2,13 +2,21 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { authStore } from '@/stores/authStore';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 interface ProfileSidebarProps {
   onLogout: () => void;
 }
 
 export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
+  const navigate = useNavigate();
+
+  const onAdminOpen = () => {
+    if(!authStore.isAuthenticated && authStore.userrole.toLowerCase() !== 'admin') return;
+
+    navigate('/admin');
+  }
+
   return (
     <div>
       <Card>
@@ -36,7 +44,7 @@ export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
                 <Button
                   variant='secondary'
                   className='w-full'
-                  onClick={onLogout}
+                  onClick={onAdminOpen}
                 >
                   Admin Dashboard
                 </Button>

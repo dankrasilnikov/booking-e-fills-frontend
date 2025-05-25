@@ -26,18 +26,18 @@ class AuthStore {
   initialize() {
     if (this.initialized) return;
     const refreshToken = localStorage.getItem('refresh_token');
-    if (refreshToken) {
-      this.isAuthenticated = true;
+    if (refreshToken && this.refreshCallback) {
+      // Attempt to refresh on startup if we have a token
+      this.refreshToken();
     }
-
     this.initialized = true;
   }
 
   setRefreshCallback(callback: RefreshCallback) {
     this.refreshCallback = callback;
-    // If we have a refresh token and are authenticated, try to refresh now
     const refreshToken = localStorage.getItem('refresh_token');
-    if (refreshToken && this.isAuthenticated) {
+    if (refreshToken) {
+      // Trigger a refresh when callback is set
       this.refreshToken();
     }
   }
@@ -64,6 +64,8 @@ class AuthStore {
     this.accessToken = null;
     this.user = null;
     this.isAuthenticated = false;
+    this.username = null;
+    this.userrole = null;
     localStorage.removeItem('refresh_token');
   }
 
@@ -72,7 +74,6 @@ class AuthStore {
   }
 
   async refreshToken() {
-    // If there's already a refresh in progress, return that promise
     if (this.refreshPromise) {
       return this.refreshPromise;
     }
@@ -83,15 +84,15 @@ class AuthStore {
       return;
     }
 
-    // Create a new refresh promise
     this.refreshPromise = (async () => {
       try {
         const response = await this.refreshCallback(refreshToken);
         this.setAuth(response.access_token, response.user);
         this.setRefreshToken(response.refresh_token);
-        const { username, role } = await user.getProfile(response.user.id);
-        this.username = username;
-        this.userrole = role;
+
+        const profile = await user.getProfile(response.user.id);
+        this.username = profile.username;
+        this.userrole = profile.role;
       } catch (error) {
         console.error('Failed to refresh token:', error);
         this.logout();
@@ -103,7 +104,6 @@ class AuthStore {
     return this.refreshPromise;
   }
 
-  // Method to check if token needs refresh and handle it
   async ensureValidToken() {
     if (!this.accessToken) {
       await this.refreshToken();

@@ -22,6 +22,7 @@ const Admin = () => {
     const checkAuth = async () => {
       try {
         if(!authStore.isAuthenticated) {
+          console.log(authStore.isAuthenticated);
           navigate('/login', { state: { from: '/admin' } });
           return;
         }
@@ -97,7 +98,6 @@ const Admin = () => {
       <h1 className='text-3xl font-bold mb-6'>Admin Dashboard</h1>
 
       <div className='grid gap-6 md:grid-cols-2'>
-        {/* Add Station Section */}
         <Card>
           <CardHeader>
             <CardTitle>Add New Station</CardTitle>
