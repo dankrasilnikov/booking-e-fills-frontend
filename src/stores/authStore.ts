@@ -47,6 +47,7 @@ class AuthStore {
     this.accessToken = accessToken;
     this.user = user;
     this.isAuthenticated = true;
+    this.isLoading = false;
   }
 
   setAccessToken(accessToken: string) {
@@ -57,10 +58,6 @@ class AuthStore {
     localStorage.setItem('refresh_token', refreshToken);
   }
 
-  setUsername(username: string) {
-    this.username = username;
-  }
-
   logout() {
     this.accessToken = null;
     this.user = null;
@@ -68,10 +65,6 @@ class AuthStore {
     this.username = null;
     this.userrole = null;
     localStorage.removeItem('refresh_token');
-  }
-
-  get userData() {
-    return this.user;
   }
 
   async refreshToken() {
@@ -89,7 +82,6 @@ class AuthStore {
       try {
         const response = await this.refreshCallback(refreshToken);
         this.setAuth(response.access_token, response.user);
-        this.isLoading = false;
         this.setRefreshToken(response.refresh_token);
 
         const profile = await user.getProfile(response.user.id);

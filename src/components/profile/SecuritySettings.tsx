@@ -1,96 +1,106 @@
-import { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
-import { user } from '@/lib/api.ts';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const securitySchema = z.object({
+  newPassword: z.string().min(8, 'Password must be at least 8 characters'),
+  confirmPassword: z.string(),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
+});
+
+type SecurityFormData = z.infer<typeof securitySchema>;
 
 interface SecuritySettingsProps {
   onPasswordUpdate: (
-    currentPassword: string,
-    newPassword: string
+      currentPassword: string,
+      newPassword: string
   ) => Promise<void>;
 }
 
-export const SecuritySettings = ({
-  onPasswordUpdate,
-}: SecuritySettingsProps) => {
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+export const SecuritySettings: React.FC<SecuritySettingsProps> = ({
+                                                                    onPasswordUpdate,
+                                                                  }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<SecurityFormData>({
+    resolver: zodResolver(securitySchema),
+    defaultValues: { newPassword: '', confirmPassword: '' },
+  });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (newPassword !== confirmPassword) {
-      toast({
-        variant: 'destructive',
-        title: 'Passwords do not match',
-        description: 'Your new password and confirmation do not match.',
-      });
-      return;
-    }
-
-    setIsLoading(true);
-
+  const onSubmit = async (data: SecurityFormData) => {
     try {
-      await user.changePassword(newPassword);
+      await onPasswordUpdate(data.newPassword, data.newPassword);
       toast({
         title: 'Password Updated',
         description: 'Your password has been changed successfully.',
       });
-      setNewPassword('');
-      setConfirmPassword('');
+      reset();
     } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Update Failed',
         description:
-          'Failed to update password. Please check your current password and try again.',
+            'Failed to update password. Please check your current password and try again.',
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Security Settings</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className='space-y-4'>
-          <div className='space-y-2'>
-            <label htmlFor='newPassword' className='text-sm font-medium'>
-              New Password
-            </label>
-            <Input
-              id='newPassword'
-              type='password'
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-          </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Security Settings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="newPassword" className="text-sm font-medium">
+                New Password
+              </label>
+              <Input
+                  id="newPassword"
+                  type="password"
+                  {...register('newPassword')}
+                  placeholder="••••••••"
+                  className={errors.newPassword ? 'border-red-500' : ''}
+                  required
+              />
+              {errors.newPassword && (
+                  <p className="text-xs text-red-500">{errors.newPassword.message}</p>
+              )}
+            </div>
 
-          <div className='space-y-2'>
-            <label htmlFor='confirmPassword' className='text-sm font-medium'>
-              Confirm New Password
-            </label>
-            <Input
-              id='confirmPassword'
-              type='password'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div className="space-y-2">
+              <label htmlFor="confirmPassword" className="text-sm font-medium">
+                Confirm New Password
+              </label>
+              <Input
+                  id="confirmPassword"
+                  type="password"
+                  {...register('confirmPassword')}
+                  placeholder="••••••••"
+                  className={errors.confirmPassword ? 'border-red-500' : ''}
+                  required
+              />
+              {errors.confirmPassword && (
+                  <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+              )}
+            </div>
 
-          <Button type='submit' disabled={isLoading}>
-            {isLoading ? 'Updating...' : 'Update Password'}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Updating...' : 'Update Password'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
   );
 };
