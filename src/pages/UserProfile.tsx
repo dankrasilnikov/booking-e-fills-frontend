@@ -19,7 +19,6 @@ const UserProfile = () => {
     const fetchBookingHistory = async () => {
       try {
         const reservations = await user.getReservations();
-        console.log(reservations);
         setBookingHistory(reservations);
       } catch (error) {
         console.error('Error fetching booking history:', error);
