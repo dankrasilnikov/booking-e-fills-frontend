@@ -21,7 +21,7 @@ const Admin = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        if(!authStore.isAuthenticated) {
+        if (!authStore.isAuthenticated) {
           console.log(authStore.isAuthenticated);
           navigate('/login', { state: { from: '/admin' } });
           return;

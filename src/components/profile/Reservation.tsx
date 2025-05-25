@@ -14,13 +14,13 @@ interface ReservationProps {
 }
 
 export const Reservation: React.FC<ReservationProps> = ({
-                                                          duration,
-                                                          seqNum,
-                                                          start,
-                                                          title,
-                                                          uuid,
-                                                          onCancel,
-                                                        }) => {
+  duration,
+  seqNum,
+  start,
+  title,
+  uuid,
+  onCancel,
+}) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
@@ -47,41 +47,41 @@ export const Reservation: React.FC<ReservationProps> = ({
   };
 
   return (
-      <>
-        <div className='border rounded-md p-4'>
-          <div className='flex justify-between items-center mb-2'>
-            <h3 className='font-semibold'>{title}</h3>
-            <div className='flex items-center gap-2'>
-              <Button
-                  variant='ghost'
-                  size='icon'
-                  className='h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-100'
-                  onClick={() => onCancel(uuid)}
-              >
-                <X className='h-4 w-4' />
-              </Button>
-            </div>
-          </div>
-
-          <div className='text-sm text-gray-500 space-y-1'>
-            <div>Start Time: {formatDate(start)}</div>
-            <div>Duration: {formatDuration(duration)}</div>
-          </div>
-
-          {/* Actions */}
-          <div className='flex gap-2 mt-4'>
+    <>
+      <div className='border rounded-md p-4'>
+        <div className='flex justify-between items-center mb-2'>
+          <h3 className='font-semibold'>{title}</h3>
+          <div className='flex items-center gap-2'>
             <Button
-                variant='outline'
-                className='flex items-center gap-2'
-                onClick={() => setOpen(true)}
+              variant='ghost'
+              size='icon'
+              className='h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-100'
+              onClick={() => onCancel(uuid)}
             >
-              <QrCode className='h-4 w-4' />
-              Show QR
+              <X className='h-4 w-4' />
             </Button>
           </div>
         </div>
 
-        <QRModal uuid={uuid} open={open} setOpen={setOpen} />
-      </>
+        <div className='text-sm text-gray-500 space-y-1'>
+          <div>Start Time: {formatDate(start)}</div>
+          <div>Duration: {formatDuration(duration)}</div>
+        </div>
+
+        {/* Actions */}
+        <div className='flex gap-2 mt-4'>
+          <Button
+            variant='outline'
+            className='flex items-center gap-2'
+            onClick={() => setOpen(true)}
+          >
+            <QrCode className='h-4 w-4' />
+            Show QR
+          </Button>
+        </div>
+      </div>
+
+      <QRModal uuid={uuid} open={open} setOpen={setOpen} />
+    </>
   );
 };

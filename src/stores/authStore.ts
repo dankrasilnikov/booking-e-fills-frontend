@@ -20,7 +20,6 @@ class AuthStore {
   private refreshCallback: RefreshCallback | null = null;
   private initialized = false;
 
-
   constructor() {
     makeAutoObservable(this);
   }

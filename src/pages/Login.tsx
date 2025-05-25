@@ -3,7 +3,14 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { auth, user as userApi } from '@/lib/api';
@@ -33,7 +40,10 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const resp = await auth.login({ email: data.email, password: data.password });
+      const resp = await auth.login({
+        email: data.email,
+        password: data.password,
+      });
       authStore.setAuth(resp.access_token, resp.user);
       authStore.setRefreshToken(resp.refresh_token);
       const profile = await userApi.getProfile(resp.user.id);
@@ -75,59 +85,73 @@ const Login: React.FC = () => {
   };
 
   return (
-      <div className="container max-w-md mx-auto px-4 py-12">
-        <Card className="shadow-lg">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Welcome Back</CardTitle>
-            <CardDescription className="text-center">
-              Enter your credentials to access your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium">Email</label>
-                <Input
-                    id="email"
-                    type="email"
-                    {...register('email')}
-                    placeholder="your.email@example.com"
-                    className={errors.email ? 'border-red-500' : ''}
-                />
-                {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="text-sm font-medium">Password</label>
-                  <button
-                      type="button"
-                      onClick={handleForgotPassword}
-                      className="text-sm text-e-blue hover:underline"
-                  >
-                    Forgot password?
-                  </button>
-                </div>
-                <Input
-                    id="password"
-                    type="password"
-                    {...register('password')}
-                    className={errors.password ? 'border-red-500' : ''}
-                />
-                {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
-              </div>
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? 'Signing in...' : 'Sign In'}
-              </Button>
-            </form>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <Link to="/register" className="text-e-blue hover:underline">Sign up</Link>
+    <div className='container max-w-md mx-auto px-4 py-12'>
+      <Card className='shadow-lg'>
+        <CardHeader className='space-y-1'>
+          <CardTitle className='text-2xl font-bold text-center'>
+            Welcome Back
+          </CardTitle>
+          <CardDescription className='text-center'>
+            Enter your credentials to access your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+            <div className='space-y-2'>
+              <label htmlFor='email' className='text-sm font-medium'>
+                Email
+              </label>
+              <Input
+                id='email'
+                type='email'
+                {...register('email')}
+                placeholder='your.email@example.com'
+                className={errors.email ? 'border-red-500' : ''}
+              />
+              {errors.email && (
+                <p className='text-xs text-red-500'>{errors.email.message}</p>
+              )}
             </div>
-          </CardFooter>
-        </Card>
-      </div>
+            <div className='space-y-2'>
+              <div className='flex items-center justify-between'>
+                <label htmlFor='password' className='text-sm font-medium'>
+                  Password
+                </label>
+                <button
+                  type='button'
+                  onClick={handleForgotPassword}
+                  className='text-sm text-e-blue hover:underline'
+                >
+                  Forgot password?
+                </button>
+              </div>
+              <Input
+                id='password'
+                type='password'
+                {...register('password')}
+                className={errors.password ? 'border-red-500' : ''}
+              />
+              {errors.password && (
+                <p className='text-xs text-red-500'>
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            <Button type='submit' className='w-full' disabled={isSubmitting}>
+              {isSubmitting ? 'Signing in...' : 'Sign In'}
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter className='flex flex-col space-y-4'>
+          <div className='text-center text-sm'>
+            Don&apos;t have an account?{' '}
+            <Link to='/register' className='text-e-blue hover:underline'>
+              Sign up
+            </Link>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 

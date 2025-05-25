@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { authStore } from '@/stores/authStore';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 interface ProfileSidebarProps {
@@ -17,15 +17,19 @@ const ProfileSidebar = ({ totalBookings, onLogout }: ProfileSidebarProps) => {
     const d = new Date(iso);
     return d.toLocaleDateString(undefined, {
       month: 'long',
-      year:  'numeric',
+      year: 'numeric',
     });
   };
 
   const onAdminOpen = () => {
-    if(!authStore.isAuthenticated && authStore.userrole.toLowerCase() !== 'admin') return;
+    if (
+      !authStore.isAuthenticated &&
+      authStore.userrole.toLowerCase() !== 'admin'
+    )
+      return;
 
     navigate('/admin');
-  }
+  };
 
   return (
     <div>
@@ -35,7 +39,9 @@ const ProfileSidebar = ({ totalBookings, onLogout }: ProfileSidebarProps) => {
             <Avatar className='h-24 w-24 mb-4'>
               <AvatarImage src='' />
               <AvatarFallback className='bg-e-blue text-white text-2xl'>
-                {authStore?.username ? authStore?.username.charAt(0).toUpperCase() : 'U'}
+                {authStore?.username
+                  ? authStore?.username.charAt(0).toUpperCase()
+                  : 'U'}
               </AvatarFallback>
             </Avatar>
             <h2 className='text-xl font-bold'>

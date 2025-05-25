@@ -1,13 +1,14 @@
 @keyframes cloudFloat {
-    0%, 100% {
-        transform: translate(0, 0);
-    }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
 
-    50% {
-        transform: translate(-8px, 4px);
-    }
+  50% {
+    transform: translate(-8px, 4px);
+  }
 }
 
 .animate-cloud {
-    animation: cloudFloat 5s ease-in-out infinite;
+  animation: cloudFloat 5s ease-in-out infinite;
 }

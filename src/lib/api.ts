@@ -1,15 +1,15 @@
 import {
-    AddStationRequest,
-    ApiResponse,
-    AuthResponse,
-    BookStationRequest,
-    GasStation,
-    IMapObject,
-    LoginRequest,
-    RefreshRequest,
-    RegisterRequest,
+  AddStationRequest,
+  ApiResponse,
+  AuthResponse,
+  BookStationRequest,
+  GasStation,
+  IMapObject,
+  LoginRequest,
+  RefreshRequest,
+  RegisterRequest,
 } from '../types/api';
-import {authStore} from '../stores/authStore';
+import { authStore } from '../stores/authStore';
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
@@ -102,7 +102,7 @@ export const auth = {
 
 export const user = {
   getProfile: (userId: number): Promise<{ username: string; role: string }> =>
-      apiCall(`/users/profile?supabaseId=${userId}`),
+    apiCall(`/users/profile?supabaseId=${userId}`),
 
   changePassword: (password: string): Promise<any> =>
     apiCall('/users/profile/changepass', {
@@ -181,5 +181,4 @@ export async function initializeAuth() {
 
     return response;
   });
-
 }

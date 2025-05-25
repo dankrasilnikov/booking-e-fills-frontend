@@ -10,7 +10,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 // Zod schema for profile form validation
 const profileSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(50, 'Name must be 50 chars or less'),
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .max(50, 'Name must be 50 chars or less'),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -22,10 +25,10 @@ interface ProfileSettingsProps {
 }
 
 export const ProfileSettings: React.FC<ProfileSettingsProps> = ({
-                                                                  initialName,
-                                                                  initialEmail,
-                                                                  onUpdate,
-                                                                }) => {
+  initialName,
+  initialEmail,
+  onUpdate,
+}) => {
   const {
     register,
     handleSubmit,
@@ -53,46 +56,46 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   };
 
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Profile Settings</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
-                Name
-              </label>
-              <Input
-                  id="name"
-                  {...register('name')}
-                  placeholder="Your name"
-                  className={errors.name ? 'border-red-500' : ''}
-                  required
-              />
-              {errors.name && (
-                  <p className="text-xs text-red-500">{errors.name.message}</p>
-              )}
-            </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Profile Settings</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+          <div className='space-y-2'>
+            <label htmlFor='name' className='text-sm font-medium'>
+              Name
+            </label>
+            <Input
+              id='name'
+              {...register('name')}
+              placeholder='Your name'
+              className={errors.name ? 'border-red-500' : ''}
+              required
+            />
+            {errors.name && (
+              <p className='text-xs text-red-500'>{errors.name.message}</p>
+            )}
+          </div>
 
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email
-              </label>
-              <Input
-                  id="email"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  disabled
-                  value={initialEmail}
-              />
-            </div>
+          <div className='space-y-2'>
+            <label htmlFor='email' className='text-sm font-medium'>
+              Email
+            </label>
+            <Input
+              id='email'
+              type='email'
+              placeholder='your.email@example.com'
+              disabled
+              value={initialEmail}
+            />
+          </div>
 
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Updating...' : 'Update Profile'}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+          <Button type='submit' disabled={isSubmitting}>
+            {isSubmitting ? 'Updating...' : 'Update Profile'}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
