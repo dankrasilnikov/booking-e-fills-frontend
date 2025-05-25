@@ -13,7 +13,7 @@ interface Booking {
   seqNum: number;
   start: number;
   title: string;
-  id: number;
+  uuid: string;
 }
 
 interface BookingHistoryProps {
@@ -36,9 +36,9 @@ export const BookingHistory = ({ bookings, onRefresh }: BookingHistoryProps) => 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Booking History</CardTitle>
+        <CardTitle>Bookings</CardTitle>
         <CardDescription>
-          View your past and upcoming charging station reservations
+          View your upcoming charging station reservations
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -46,7 +46,7 @@ export const BookingHistory = ({ bookings, onRefresh }: BookingHistoryProps) => 
           <div className='space-y-4'>
             {bookings.map((booking) => (
               <Reservation
-                key={booking.seqNum}
+                key={booking.uuid}
                 {...booking}
                 onCancel={handleCancel}
               />

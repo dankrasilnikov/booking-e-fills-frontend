@@ -101,7 +101,7 @@ const Map = () => {
     setOpenReservationDialog(true);
   };
 
-  const handleReservation = () => {
+  const handleReservation = async () => {
     if (!authStore.isAuthenticated) {
       toast({
         title: 'Login required',
@@ -117,8 +117,7 @@ const Map = () => {
     const isoDuration = formatDuration(bookingTime.duration);
     const timestamp = Math.floor(new Date(bookingTime.time).getTime() / 1000);
     console.log(1, timestamp, selectedStation.title, isoDuration);
-    user.createReservation(1, timestamp, selectedStation.title, isoDuration);
-    
+    const response = await user.createReservation(1, timestamp, selectedStation.title, isoDuration);
     // Mock successful reservation
     toast({
       title: 'Reservation Confirmed!',
@@ -131,6 +130,7 @@ const Map = () => {
         station: selectedStation,
         bookingTime: bookingTime.time,
         duration: bookingTime.duration,
+        reservation: response
       },
     });
 

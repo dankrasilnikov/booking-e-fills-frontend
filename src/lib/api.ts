@@ -134,8 +134,8 @@ export const user = {
 
   getReservations: (): Promise<any> => apiCall('/reservations/getall'),
 
-  cancelReservation: (id: number): Promise<any> =>
-    apiCall(`/reservations/cancel/${id}`, {
+  cancelReservation: (uuid: string): Promise<any> =>
+    apiCall(`/reservations/cancel/${uuid}`, {
       method: 'DELETE',
     }),
 };
