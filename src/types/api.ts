@@ -6,6 +6,7 @@ export interface GasStation {
 export interface User {
   id: number;
   email: string;
+  created_at: string;
 }
 
 export interface Reservation {
