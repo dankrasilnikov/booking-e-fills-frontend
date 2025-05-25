@@ -102,7 +102,7 @@ const Index: React.FC = React.memo(() => (
           </div>
           <div className='md:w-1/2 relative overflow-visible'>
             <img
-              src='/marketing1.png'
+              src='/marketing1.webp'
               alt='Electric Vehicle Charging'
               width={600}
               height={400}
@@ -174,7 +174,7 @@ const Index: React.FC = React.memo(() => (
           </div>
           <div className='md:w-1/2 animate-fade-in delay-200'>
             <img
-              src='/marketing2.png'
+              src='/marketing2.webp'
               alt='Zephyra Map Interface'
               loading='lazy'
               width={600}
