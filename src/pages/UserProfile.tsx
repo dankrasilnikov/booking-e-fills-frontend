@@ -75,7 +75,6 @@ const UserProfile: React.FC = () => {
                     />
                 </div>
 
-                {/* Main content fades in and slides up with opacity */}
                 <div
                     className={
                         `lg:col-span-2 space-y-6 transition-all duration-700 ease-out transform ${
