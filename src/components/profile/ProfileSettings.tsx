@@ -27,7 +27,7 @@ export const ProfileSettings = ({
 
     try {
       await user.changeUsername(name);
-      authStore.setUsername(name);
+      authStore.username = name;
       toast({
         title: 'Profile Updated',
         description: 'Your profile information has been updated successfully.',

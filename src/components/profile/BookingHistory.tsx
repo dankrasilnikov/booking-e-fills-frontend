@@ -1,64 +1,70 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Reservation } from './Reservation';
-import { useState } from 'react';
+import { useToast } from '@/components/ui/use-toast';
+import { user } from '@/lib/api.ts';
 
 interface Booking {
-  duration: string;
-  seqNum: number;
-  start: number;
-  title: string;
-  uuid: string;
+    duration: string;
+    seqNum: number;
+    start: number;
+    title: string;
+    uuid: string;
 }
 
 interface BookingHistoryProps {
-  bookings: Booking[];
-  onRefresh: () => Promise<void>;
+    bookings: Booking[];
+    setBookings: (bookings: Booking[]) => void;
 }
 
 export const BookingHistory = ({
-  bookings,
-  onRefresh,
-}: BookingHistoryProps) => {
-  const [isRefreshing, setIsRefreshing] = useState(false);
+                                   bookings,
+                                   setBookings,
+                               }: BookingHistoryProps) => {
+    const { toast } = useToast();
 
-  const handleCancel = async () => {
-    setIsRefreshing(true);
-    try {
-      await onRefresh();
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
+    const handleCancelReservation = async (uuid: string) => {
+        try {
+            await user.cancelReservation(uuid);
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Bookings</CardTitle>
-        <CardDescription>
-          View your upcoming charging station reservations
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {bookings.length > 0 ? (
-          <div className='space-y-4'>
-            {bookings.map((booking) => (
-              <Reservation
-                key={booking.uuid}
-                {...booking}
-                onCancel={handleCancel}
-              />
-            ))}
-          </div>
-        ) : (
-          <p className='text-gray-500'>No booking history available.</p>
-        )}
-      </CardContent>
-    </Card>
-  );
+            const updated = bookings.filter((b) => b.uuid !== uuid);
+            setBookings(updated);
+            toast({
+                title: 'Reservation cancelled',
+                description: 'Your reservation has been successfully cancelled.',
+                variant: 'default',
+            });
+        } catch (error) {
+            toast({
+                title: 'Error',
+                description: 'Failed to cancel reservation. Please try again.',
+                variant: 'destructive',
+            });
+        }
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Bookings</CardTitle>
+                <CardDescription>
+                    View your upcoming charging station reservations
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                {bookings.length > 0 ? (
+                    <div className="space-y-4">
+                        {bookings.map((booking) => (
+                            <Reservation
+                                onCancel={handleCancelReservation}
+                                key={booking.uuid}
+                                {...booking}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-gray-500">No booking history available.</p>
+                )}
+            </CardContent>
+        </Card>
+    );
 };

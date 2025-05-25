@@ -3,12 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { authStore } from '@/stores/authStore';
 import {Link, useNavigate} from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 interface ProfileSidebarProps {
   onLogout: () => void;
 }
 
-export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
+const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
   const navigate = useNavigate();
 
   const onAdminOpen = () => {
@@ -68,13 +69,11 @@ export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
               <span className='text-gray-500'>Total Bookings</span>
               <span>3</span>
             </div>
-            <div className='flex justify-between'>
-              <span className='text-gray-500'>Favorite Stations</span>
-              <span>2</span>
-            </div>
           </div>
         </CardContent>
       </Card>
     </div>
   );
 };
+
+export default observer(ProfileSidebar);

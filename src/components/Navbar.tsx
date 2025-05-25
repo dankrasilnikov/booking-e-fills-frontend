@@ -1,22 +1,20 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
-import { Menu, X, User } from 'lucide-react';
-import { authStore } from '@/stores/authStore';
+import {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import {Button} from '@/components/ui/button';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from '@/components/ui/dropdown-menu';
+import {Menu, X} from 'lucide-react';
+import {authStore} from '@/stores/authStore';
+import {observer} from "mobx-react-lite";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     authStore.logout();
+    navigate('/');
     setIsDropdownOpen(false);
   };
 
@@ -29,7 +27,6 @@ const Navbar: React.FC = () => {
               <span className="text-xl font-bold">Zephyra</span>
             </Link>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
               <Link to="/" className="text-gray-600 hover:text-e-blue transition-colors">
                 Home
@@ -145,4 +142,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+export default observer(Navbar);

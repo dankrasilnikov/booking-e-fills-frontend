@@ -1,18 +1,8 @@
-import { useState, useMemo } from 'react';
-import { X, QrCode } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { useToast } from '@/components/ui/use-toast';
-import QRCode from 'react-qr-code';
-import { user } from '@/lib/api';
-import { QRModal } from './QRModal';
+import {useState} from 'react';
+import {QrCode, X} from 'lucide-react';
+import {Button} from '@/components/ui/button';
+import {useToast} from '@/components/ui/use-toast';
+import {QRModal} from './QRModal';
 
 interface ReservationProps {
   duration: string;
@@ -20,7 +10,7 @@ interface ReservationProps {
   start: number;
   title: string;
   uuid: string;
-  onCancel: () => void;
+  onCancel: (uuid: string) =>  void;
 }
 
 export const Reservation = ({
@@ -29,7 +19,7 @@ export const Reservation = ({
   start,
   title,
   uuid,
-  onCancel,
+    onCancel,
 }: ReservationProps) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -49,24 +39,6 @@ export const Reservation = ({
     return `${hours} hour${hours !== '1' ? 's' : ''}`;
   };
 
-  const cancelReservation = async () => {
-    try {
-      await user.cancelReservation(uuid);
-      toast({
-        title: 'Reservation cancelled',
-        description: 'Your reservation has been successfully cancelled.',
-        variant: 'default',
-      });
-      onCancel();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to cancel reservation. Please try again.',
-        variant: 'destructive',
-      });
-    }
-  };
-
   return (
     <>
       <div className='border rounded-md p-4'>
@@ -78,7 +50,7 @@ export const Reservation = ({
               variant='ghost'
               size='icon'
               className='h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-100'
-              onClick={cancelReservation}
+              onClick={() => onCancel(uuid)}
             >
               <X className='h-4 w-4' />
             </Button>
