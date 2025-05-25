@@ -173,10 +173,13 @@ export const admin = {
     }),
 };
 
-export function initializeAuth() {
+export async function initializeAuth() {
   authStore.initialize();
+
   authStore.setRefreshCallback(async (refreshToken) => {
     const response = await auth.refresh({ refresh_token: refreshToken });
+
     return response;
   });
+
 }

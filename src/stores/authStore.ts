@@ -14,10 +14,12 @@ class AuthStore {
   isAuthenticated: boolean = false;
   username: string | null = null;
   userrole: string | null = null;
+  isLoading: boolean = true;
 
   private refreshPromise: Promise<void> | null = null;
   private refreshCallback: RefreshCallback | null = null;
   private initialized = false;
+
 
   constructor() {
     makeAutoObservable(this);
@@ -27,7 +29,6 @@ class AuthStore {
     if (this.initialized) return;
     const refreshToken = localStorage.getItem('refresh_token');
     if (refreshToken && this.refreshCallback) {
-      // Attempt to refresh on startup if we have a token
       this.refreshToken();
     }
     this.initialized = true;
@@ -88,6 +89,7 @@ class AuthStore {
       try {
         const response = await this.refreshCallback(refreshToken);
         this.setAuth(response.access_token, response.user);
+        this.isLoading = false;
         this.setRefreshToken(response.refresh_token);
 
         const profile = await user.getProfile(response.user.id);

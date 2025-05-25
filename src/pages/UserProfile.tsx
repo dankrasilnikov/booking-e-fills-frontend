@@ -10,7 +10,6 @@ import {authStore} from '@/stores/authStore';
 import {toast} from 'sonner';
 
 const UserProfile = () => {
-    const navigate = useNavigate();
     const [bookingHistory, setBookingHistory] = useState([]);
     const [totalBookings, setTotalBookings] = useState(0);
 
@@ -31,12 +30,6 @@ const UserProfile = () => {
 
         fetchBookingHistory();
     }, []);
-
-    // Redirect if not authenticated
-    if (!authStore.isAuthenticated || !authStore.userData) {
-        navigate('/login', {state: {from: '/profile'}});
-        return null;
-    }
 
     const handleProfileUpdate = async (name: string, email: string) => {
         // Simulate API call
