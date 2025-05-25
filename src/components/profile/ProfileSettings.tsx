@@ -3,8 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
-import {user} from "@/lib/api.ts";
-import {authStore} from "@/stores/authStore.ts";
+import { user } from '@/lib/api.ts';
+import { authStore } from '@/stores/authStore.ts';
 
 interface ProfileSettingsProps {
   initialName: string;

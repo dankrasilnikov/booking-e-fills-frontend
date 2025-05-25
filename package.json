@@ -8,7 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "lint:fix": "eslint ./src .ts,.tsx --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
     "preview": "vite preview"
   },

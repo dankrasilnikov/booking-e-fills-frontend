@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 const formatDuration = (minutes: number): string => {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
-  
+
   let duration = 'PT';
   if (hours > 0) {
     duration += `${hours}H`;
@@ -21,7 +21,7 @@ const formatDuration = (minutes: number): string => {
   if (remainingMinutes > 0) {
     duration += `${remainingMinutes}M`;
   }
-  
+
   return duration;
 };
 
@@ -117,7 +117,12 @@ const Map = () => {
     const isoDuration = formatDuration(bookingTime.duration);
     const timestamp = Math.floor(new Date(bookingTime.time).getTime() / 1000);
     console.log(1, timestamp, selectedStation.title, isoDuration);
-    const response = await user.createReservation(1, timestamp, selectedStation.title, isoDuration);
+    const response = await user.createReservation(
+      1,
+      timestamp,
+      selectedStation.title,
+      isoDuration
+    );
     // Mock successful reservation
     toast({
       title: 'Reservation Confirmed!',
@@ -130,7 +135,7 @@ const Map = () => {
         station: selectedStation,
         bookingTime: bookingTime.time,
         duration: bookingTime.duration,
-        reservation: response
+        reservation: response,
       },
     });
 

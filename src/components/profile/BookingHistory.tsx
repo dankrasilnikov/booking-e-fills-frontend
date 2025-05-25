@@ -21,7 +21,10 @@ interface BookingHistoryProps {
   onRefresh: () => Promise<void>;
 }
 
-export const BookingHistory = ({ bookings, onRefresh }: BookingHistoryProps) => {
+export const BookingHistory = ({
+  bookings,
+  onRefresh,
+}: BookingHistoryProps) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleCancel = async () => {
