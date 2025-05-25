@@ -1,21 +1,18 @@
 import {
-  GasStation,
-  Reservation,
-  StationSlot,
-  RegisterRequest,
-  LoginRequest,
-  BookStationRequest,
-  AddStationRequest,
-  AuthResponse,
-  ApiResponse,
-  IMapObject,
-  RefreshRequest,
+    AddStationRequest,
+    ApiResponse,
+    AuthResponse,
+    BookStationRequest,
+    GasStation,
+    IMapObject,
+    LoginRequest,
+    RefreshRequest,
+    RegisterRequest,
 } from '../types/api';
-import { authStore } from '../stores/authStore';
+import {authStore} from '../stores/authStore';
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
-// Separate function for refresh calls to avoid recursion
 async function refreshApiCall<T>(
   endpoint: string,
   options: RequestInit = {}
@@ -64,7 +61,7 @@ async function apiCall<T>(
     if (response.status === 401) {
       requestCount += 1;
       await authStore.refreshToken();
-      // Retry the request with new token
+
       return apiCall(endpoint, options);
     }
     throw new Error(`API call failed: ${response.statusText}`);
@@ -161,7 +158,6 @@ export const gasStations = {
     }),
 };
 
-// Admin endpoints
 export const admin = {
   getAllStations: (): Promise<GasStation[]> => apiCall('/admin/stations'),
 
@@ -177,7 +173,6 @@ export const admin = {
     }),
 };
 
-// Initialize auth store and set up refresh callback
 export function initializeAuth() {
   authStore.initialize();
   authStore.setRefreshCallback(async (refreshToken) => {

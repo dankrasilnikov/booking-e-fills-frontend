@@ -21,10 +21,12 @@ const Admin = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Check if user is authenticated and is admin
-        console.log(authStore.userrole);
-        if (authStore.userrole?.toLowerCase() !== 'admin') {
+        if(!authStore.isAuthenticated) {
           navigate('/login', { state: { from: '/admin' } });
+          return;
+        }
+        if (authStore.userrole?.toLowerCase() !== 'admin') {
+          navigate('/profile', { state: { from: '/admin' } });
           return;
         }
       } catch (error) {
@@ -34,7 +36,6 @@ const Admin = () => {
         setIsCheckingAuth(false);
       }
     };
-
     checkAuth();
   }, [navigate]);
 

@@ -14,6 +14,7 @@ class AuthStore {
   isAuthenticated: boolean = false;
   username: string | null = null;
   userrole: string | null = null;
+
   private refreshPromise: Promise<void> | null = null;
   private refreshCallback: RefreshCallback | null = null;
   private initialized = false;
@@ -24,8 +25,6 @@ class AuthStore {
 
   initialize() {
     if (this.initialized) return;
-
-    // Initialize from localStorage if available
     const refreshToken = localStorage.getItem('refresh_token');
     if (refreshToken) {
       this.isAuthenticated = true;

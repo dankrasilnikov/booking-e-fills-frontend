@@ -39,7 +39,6 @@ const Login = () => {
       navigate(from);
     } catch (error) {
       console.error('Login error:', error);
-      // Handle error (show error message to user)
     } finally {
       setIsLoading(false);
     }

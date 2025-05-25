@@ -17,9 +17,7 @@ export const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
             <Avatar className='h-24 w-24 mb-4'>
               <AvatarImage src='' />
               <AvatarFallback className='bg-e-blue text-white text-2xl'>
-                {authStore?.username
-                  ? authStore?.username.charAt(0).toUpperCase()
-                  : 'U'}
+                {authStore?.username ? authStore?.username.charAt(0).toUpperCase() : 'U'}
               </AvatarFallback>
             </Avatar>
             <h2 className='text-xl font-bold'>
