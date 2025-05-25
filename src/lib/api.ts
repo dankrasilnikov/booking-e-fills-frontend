@@ -105,7 +105,7 @@ export const auth = {
 
 export const user = {
   getProfile: (userId: number): Promise<{ username: string; role: string }> =>
-    apiCall(`/users/profile?supabaseId=${userId}`),
+    apiCall(`/users/profile?username=${userId}`),
 
   changePassword: (password: string): Promise<any> =>
     apiCall('/users/profile/changepass', {
