@@ -42,6 +42,9 @@ export const BookingHistory = ({
         }
     };
 
+    // Create a reversed copy of bookings for display
+    const reversedBookings = bookings.slice().reverse();
+
     return (
         <Card>
             <CardHeader>
@@ -51,9 +54,9 @@ export const BookingHistory = ({
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                {bookings.length > 0 ? (
+                {reversedBookings.length > 0 ? (
                     <div className="space-y-4">
-                        {bookings.map((booking) => (
+                        {reversedBookings.map((booking) => (
                             <Reservation
                                 onCancel={handleCancelReservation}
                                 key={booking.uuid}

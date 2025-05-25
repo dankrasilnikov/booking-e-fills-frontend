@@ -6,11 +6,20 @@ import {Link, useNavigate} from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 interface ProfileSidebarProps {
+  totalBookings: number;
   onLogout: () => void;
 }
 
-const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
+const ProfileSidebar = ({ totalBookings, onLogout }: ProfileSidebarProps) => {
   const navigate = useNavigate();
+
+  const formatMonthYear = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, {
+      month: 'long',
+      year:  'numeric',
+    });
+  };
 
   const onAdminOpen = () => {
     if(!authStore.isAuthenticated && authStore.userrole.toLowerCase() !== 'admin') return;
@@ -63,11 +72,11 @@ const ProfileSidebar = ({ onLogout }: ProfileSidebarProps) => {
           <div className='space-y-4'>
             <div className='flex justify-between'>
               <span className='text-gray-500'>Member Since</span>
-              <span>May 2025</span>
+              <span>{formatMonthYear(authStore.user?.created_at)}</span>
             </div>
             <div className='flex justify-between'>
               <span className='text-gray-500'>Total Bookings</span>
-              <span>3</span>
+              <span>{totalBookings}</span>
             </div>
           </div>
         </CardContent>

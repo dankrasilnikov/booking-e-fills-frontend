@@ -12,6 +12,11 @@ import {toast} from 'sonner';
 const UserProfile = () => {
     const navigate = useNavigate();
     const [bookingHistory, setBookingHistory] = useState([]);
+    const [totalBookings, setTotalBookings] = useState(0);
+
+    useEffect(() => {
+        setTotalBookings(bookingHistory.length)
+    }, [bookingHistory]);
 
     useEffect(() => {
         const fetchBookingHistory = async () => {
@@ -54,7 +59,7 @@ const UserProfile = () => {
 
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
                 {/* Left sidebar */}
-                <ProfileSidebar onLogout={() => authStore.logout()}/>
+                <ProfileSidebar onLogout={() => authStore.logout()} totalBookings={totalBookings}/>
 
                 {/* Main content */}
                 <div className='lg:col-span-2'>
