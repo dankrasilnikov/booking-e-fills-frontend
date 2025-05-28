@@ -11,7 +11,7 @@ import {
 } from '../types/api';
 import { authStore } from '../stores/authStore';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://booking-e-fills-backend.onrender.com/api';
 
 async function refreshApiCall<T>(
   endpoint: string,
